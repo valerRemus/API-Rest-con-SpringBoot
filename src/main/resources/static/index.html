@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Consulta de Precio</title>
+    <style>
+        /* Estilos básicos para las tarjetas */
+        .price-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            width: 300px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<h1>Consulta de Precio</h1>
+<form id="priceForm">
+    <label for="date">Fecha y Hora:</label>
+    <input type="datetime-local" id="date" name="date">
+
+    <label for="productId">ID del Producto:</label>
+    <input type="text" id="productId" name="productId">
+
+    <label for="brandId">ID de la Marca:</label>
+    <input type="text" id="brandId" name="brandId">
+
+    <br><br>
+    <button type="submit">Prueba Innoqa</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+    document.getElementById('priceForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevenir la acción por defecto del formulario
+
+        // Obtener los valores del formulario
+        var date = document.getElementById('date').value;
+        var productId = document.getElementById('productId').value;
+        var brandId = document.getElementById('brandId').value;
+
+        // Realizar una solicitud fetch a tu API REST
+        fetch(`http://localhost:8080/api/prices/byParameters?date=${date}&productId=${productId}&brandId=${brandId}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = ''; // Limpiar contenido anterior
+
+                if (Array.isArray(data) && data.length > 0) {
+                    data.forEach(price => {
+                        const priceCard = document.createElement('div');
+                        priceCard.classList.add('price-card');
+
+                        priceCard.innerHTML = `
+                            <p>ID del producto: ${price.productId}</p>
+                            <p>ID de la marca: ${price.brandId}</p>
+                            <p>Tarifa actual: ${price.priceList}</p>
+                            <p>Precio final: ${price.price}</p>
+                            <p>Fecha de Inicio: ${price.startDate}</p>
+                            <p>Fecha de Fin: ${price.endDate}</p>
+                        `;
+
+                        resultDiv.appendChild(priceCard);
+                    });
+                } else if (data) {
+                    const priceCard = document.createElement('div');
+                    priceCard.classList.add('price-card');
+                    priceCard.innerHTML = `
+                        <p>ID del producto: ${data.productId}</p>
+                        <p>ID de la marca: ${data.brandId}</p>
+                        <p>Tarifa actual: ${data.priceList}</p>
+                        <p>Precio final: ${data.price}</p>
+                        <p>Fecha de Inicio: ${data.startDate}</p>
+                        <p>Fecha de Fin: ${data.endDate}</p>
+                    `;
+                    resultDiv.appendChild(priceCard);
+                } else {
+                    resultDiv.innerHTML = 'No se encontraron resultados';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>
+</body>
+</html>
