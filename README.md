@@ -1,3 +1,8 @@
+He utilizado:
+   -Java 21
+   - Maven
+
+
 # PruebaInnoqa
 
 1. Iniciar "\src\main\java\com\innoqa\prueba\apirest\ApirestApplication.java"
