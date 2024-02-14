@@ -1,4 +1,4 @@
-Una API sencilla que segun una tarifa determinada en un rango de tiempo aplica un precio o otro a un producto.
+Una API Rest sencilla que segun una tarifa determinada en un rango de tiempo aplica un precio o otro a un producto.
 
 He utilizado:
 
